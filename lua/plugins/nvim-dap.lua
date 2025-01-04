@@ -1,27 +1,32 @@
 return {
-	{
-		"mfussenegger/nvim-dap",
-		init = function()
-			vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", {})
-			local widgets = require("dap.ui.widgets")
-			local sidebar = widgets.sidebar(widgets.scopes)
-			vim.keymap.set("n", "<leader>dus", function()
-				sidebar.toggle()
-			end, {})
-		end,
-	},
-	{
+	"mfussenegger/nvim-dap",
+	dependencies = {
 		"leoluz/nvim-dap-go",
-		ft = "go",
-		dependencies = "mfussenegger/nvim-dap",
-		config = function(_, opts)
-			local dap_go = require("dap-go").setup(opts)
-			vim.keymap.set("n", "<leader>dgt", function()
-				dap_go.debug_test()
-			end, {})
-			vim.keymap.set("n", "<leader>dgl", function()
-				dap_go.debug_last()
-			end, {})
-		end,
+		"rcarriga/nvim-dap-ui",
+		"nvim-neotest/nvim-nio",
 	},
+	config = function()
+		require("dapui").setup()
+		require("dap-go").setup()
+
+		local dap, dapui = require("dap"), require("dapui")
+
+		dap.listeners.before.attach.dapui_config = function()
+			dapui.open()
+		end
+		dap.listeners.before.launch.dapui_config = function()
+			dapui.open()
+		end
+		dap.listeners.before.event_terminated.dapui_config = function()
+			dapui.close()
+		end
+		dap.listeners.before.event_exited.dapui_config = function()
+			dapui.close()
+		end
+
+		vim.keymap.set("n", "<Leader>dt", ":DapToggleBreakpoint<CR>")
+		vim.keymap.set("n", "<Leader>dc", ":DapContinue<CR>")
+		vim.keymap.set("n", "<Leader>dx", ":DapTerminate<CR>")
+		vim.keymap.set("n", "<Leader>do", ":DapStepOver<CR>")
+	end,
 }
