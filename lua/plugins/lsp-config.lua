@@ -11,7 +11,7 @@ return {
 		lazy = false,
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "gopls" },
+				ensure_installed = { "lua_ls", "gopls", "pyright" },
 			})
 		end,
 	},
@@ -41,6 +41,17 @@ return {
 						usePlaceholders = true,
 						analyses = {
 							unusedparams = true,
+						},
+					},
+				},
+			})
+			lspconfig.pyright.setup({
+				capabilities = capabilities,
+				settings = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
 						},
 					},
 				},
