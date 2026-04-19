@@ -10,18 +10,17 @@ return {
 			layouts = {
 				{
 					elements = {
-						{ id = "scopes", size = 0.25 },
-						{ id = "breakpoints", size = 0.25 },
-						{ id = "stacks", size = 0.25 },
-						{ id = "watches", size = 0.25 },
+						{ id = "scopes", size = 0.34 },
+						{ id = "breakpoints", size = 0.33 },
+						{ id = "stacks", size = 0.33 },
 					},
-					size = 55,
+					size = 40,
 					position = "right",
 				},
 				{
 					elements = {
-						{ id = "repl", size = 0.5 },
-						{ id = "console", size = 0.5 },
+						{ id = "repl", size = 0.6 },
+						{ id = "watches", size = 0.4 },
 					},
 					size = 10,
 					position = "bottom",
@@ -55,6 +54,25 @@ return {
 			callback = function()
 				dapui.open()
 				vim.cmd("Neotree filesystem show left")
+				vim.schedule(function()
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						local buf = vim.api.nvim_win_get_buf(win)
+						if vim.bo[buf].filetype == "dapui_watches" then
+							vim.api.nvim_set_current_win(win)
+							vim.cmd("vsplit | terminal zsh --no-rcs")
+							vim.cmd("vertical resize 70")
+							break
+						end
+					end
+					-- return focus to the main editor window
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						local buf = vim.api.nvim_win_get_buf(win)
+						if vim.bo[buf].buftype == "" and vim.bo[buf].filetype == "" then
+							vim.api.nvim_set_current_win(win)
+							break
+						end
+					end
+				end)
 			end,
 		})
 	end,
