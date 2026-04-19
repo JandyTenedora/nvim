@@ -1,6 +1,6 @@
 return {
 	"scalameta/nvim-metals",
-	dependencies = { "nvim-lua/plenary.nvim" },
+	dependencies = { "nvim-lua/plenary.nvim", "mfussenegger/nvim-dap" },
 	ft = { "scala", "sbt", "java" },
 	config = function()
 		local metals_config = require("metals").bare_config()
@@ -16,6 +16,25 @@ return {
 			pattern = { "scala", "sbt", "java" },
 			callback = function()
 				require("metals").initialize_or_attach(metals_config)
+				require("metals").setup_dap()
+
+				local dap = require("dap")
+				dap.configurations.scala = {
+					{
+						type = "scala",
+						request = "launch",
+						name = "Run file",
+						metals = { runType = "runOrTestFile" },
+					},
+					{
+						type = "scala",
+						request = "launch",
+						name = "Run test target",
+						metals = { runType = "testTarget" },
+					},
+				}
+
+				vim.lsp.codelens.refresh()
 			end,
 			group = group,
 		})

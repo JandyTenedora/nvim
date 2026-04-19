@@ -11,7 +11,7 @@ return {
 		lazy = false,
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "gopls", "pyright" },
+				ensure_installed = { "lua_ls", "gopls", "pyright", "jdtls" },
 			})
 		end,
 	},
@@ -27,6 +27,8 @@ return {
 			vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
 			vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
 			vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, {})
+			vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, {})
+			vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {})
 
 			vim.lsp.config("lua_ls", {
 				settings = { Lua = { diagnostics = { globals = { "vim" } } } },
