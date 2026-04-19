@@ -11,29 +11,31 @@ return {
 			showInferredType = true,
 		}
 
+		metals_config.on_attach = function(client, bufnr)
+			require("metals").setup_dap()
+
+			local dap = require("dap")
+			dap.configurations.scala = {
+				{
+					type = "scala",
+					request = "launch",
+					name = "Run file",
+					metals = { runType = "runOrTestFile" },
+				},
+				{
+					type = "scala",
+					request = "launch",
+					name = "Run test target",
+					metals = { runType = "testTarget" },
+				},
+			}
+		end
+
 		local group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = { "scala", "sbt", "java" },
 			callback = function()
 				require("metals").initialize_or_attach(metals_config)
-				require("metals").setup_dap()
-
-				local dap = require("dap")
-				dap.configurations.scala = {
-					{
-						type = "scala",
-						request = "launch",
-						name = "Run file",
-						metals = { runType = "runOrTestFile" },
-					},
-					{
-						type = "scala",
-						request = "launch",
-						name = "Run test target",
-						metals = { runType = "testTarget" },
-					},
-				}
-
 				vim.lsp.codelens.refresh()
 			end,
 			group = group,
