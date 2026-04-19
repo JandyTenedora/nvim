@@ -59,7 +59,7 @@ return {
 						local buf = vim.api.nvim_win_get_buf(win)
 						if vim.bo[buf].filetype == "dapui_watches" then
 							vim.api.nvim_set_current_win(win)
-							vim.cmd("vsplit | terminal zsh --no-rcs")
+							vim.cmd([[vsplit | terminal env ZDOTDIR=~/.config/nvim zsh]])
 							vim.cmd("vertical resize 70")
 							break
 						end
