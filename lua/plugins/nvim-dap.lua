@@ -49,5 +49,6 @@ return {
 		vim.keymap.set("n", "<Leader>dc", ":DapContinue<CR>")
 		vim.keymap.set("n", "<Leader>dx", ":DapTerminate<CR>")
 		vim.keymap.set("n", "<Leader>do", ":DapStepOver<CR>")
+		vim.keymap.set("n", "<Leader>du", function() dapui.toggle() end)
 	end,
 }
