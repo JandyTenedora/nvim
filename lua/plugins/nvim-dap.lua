@@ -15,7 +15,7 @@ return {
 						{ id = "stacks", size = 0.25 },
 						{ id = "watches", size = 0.25 },
 					},
-					size = 40,
+					size = 55,
 					position = "right",
 				},
 				{
@@ -38,17 +38,24 @@ return {
 		dap.listeners.before.launch.dapui_config = function()
 			dapui.open()
 		end
-		dap.listeners.before.event_terminated.dapui_config = function()
-			dapui.close()
-		end
-		dap.listeners.before.event_exited.dapui_config = function()
-			dapui.close()
-		end
+		-- dap.listeners.before.event_terminated.dapui_config = function()
+		-- 	dapui.close()
+		-- end
+		-- dap.listeners.before.event_exited.dapui_config = function()
+		-- 	dapui.close()
+		-- end
 
 		vim.keymap.set("n", "<Leader>dt", ":DapToggleBreakpoint<CR>")
 		vim.keymap.set("n", "<Leader>dc", ":DapContinue<CR>")
 		vim.keymap.set("n", "<Leader>dx", ":DapTerminate<CR>")
 		vim.keymap.set("n", "<Leader>do", ":DapStepOver<CR>")
 		vim.keymap.set("n", "<Leader>du", function() dapui.toggle() end)
+
+		vim.api.nvim_create_autocmd("VimEnter", {
+			callback = function()
+				dapui.open()
+				vim.cmd("Neotree filesystem show left")
+			end,
+		})
 	end,
 }
